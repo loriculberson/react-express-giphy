@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from "axios";
 import './RandomMedia.css';
 
 const RandomMedia = () => {
@@ -13,15 +14,21 @@ const RandomMedia = () => {
     )
   })
 
-  const generateMedia = () => {
-    console.log("hi!!")
+  const updateMedia = (media) => setMedia([...allMedia, media])
+
+  const generateMedia = async () => {
+    console.log('hi from generateMedia!')
     // fetch word from the wordnik api 
     //pass word to giphy api
     //send the object of word and image url to client
     //console log the data in the console
     //add the media to state []
     //append the newest media to the DOM
+    const newMedia = await axios.get('/get-new-word');
+    console.log('media', newMedia)
+    return updateMedia(newMedia)
   }
+  
 
   return (
     <div className="App">

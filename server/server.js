@@ -42,13 +42,13 @@ const buildMediaObject = (res, {word, imageUrl}) => {
 
 const buildErrorObject = (res) => {
   const media = { 
-    word: 'Data not available', 
+    word: 'Data not available!!!', 
     imageUrl: `https://media0.giphy.com/media/7lD9Gz5FxpRCg/200.gif`
   }
   res.send(media);
 }
 
-app.get('/', (req, res) => res.send('Hello everyone!'))
+// app.get('/', (req, res) => res.send('Hello everyone!'))
 
 app.get('/get-new-word', (req, res) => {
   fetchWord()
