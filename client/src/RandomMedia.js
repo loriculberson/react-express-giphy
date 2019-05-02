@@ -29,11 +29,13 @@ const RandomMedia = () => {
     return updateMedia(newMedia.data)
   }
   
+  const clearMedia = () => setMedia([])
 
   return (
     <div className="App">
       <h1>Random Word & Giphy</h1>
       <button onClick={generateMedia}>Surprise!</button>
+      <button onClick={clearMedia}>Clear</button>
       {mediaList}
     </div>
   );
