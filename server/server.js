@@ -16,50 +16,35 @@ const wordNikAPI = `https://api.wordnik.com/v4/words.json/randomWord?${wordNikDe
 // fetchWord resolves to an object that contains the word and the giphy 
 const fetchWord = async () => {
   console.log('hi from server fetchWord')
-  // return fetch(wordNikAPI)
-  // .then((res) => res.json())
-  // .then((json) => {
-  //   console.log(json.word)
-  //   return { 
-  //     word: json.word
-  //     // giphyUrl: giphyAPI + json.word
-  //   }
-  // })
   const dataResponse = await fetch(wordNikAPI)
   const data = await dataResponse.json()
-  // console.log('word:', data.word)
+  
   return data.word
 }
 
 const fetchGraphicUrl = async (word) => {
-  //takes in word
-  //builds url from giphy
-  //returns url
-  // return fetch(giphyUrl)
-    // .then((res) => res.json())
-    // .then((json) => ({ 
-    //   word: word, 
-    //   imageUrl: json.data[0].images.fixed_height.url
-    // }))
     const giphyEndpoint = giphyAPI + word
     const giphyResponse = await fetch(giphyEndpoint)
     const giphy = await giphyResponse.json()
-    // console.log('giphyUrl:', giphy.data[0].images.fixed_height.url)
 
     return giphy.data[0].images.fixed_height.url
 }
 
 const buildMediaObject = (res, {word, imageUrl}) => {
-  const media = { word, imageUrl };
+  if (!word || !imageUrl) {
+    throw new Error("no data available");
+  }
+  const media = { word, imageUrl } 
   res.send(media);
 }
 
-const buildErrorObject = (res) => {
-  const media = { 
-    word: 'Data not available!!!', 
-    imageUrl: `https://media0.giphy.com/media/7lD9Gz5FxpRCg/200.gif`
-  }
-  res.send(media);
+const buildErrorObject = (res, errorMessage) => {
+  // const media = { 
+  //   word: 'Data not available!!!', 
+  //   imageUrl: `https://media0.giphy.com/media/7lD9Gz5FxpRCg/200.gif`
+  // }
+  // res.send(media);
+  res.status(500).send(errorMessage)
 }
 
 // app.get('/', (req, res) => res.send('Hello everyone!'))
@@ -75,10 +60,10 @@ app.get('/get-new-word', async (req, res) => {
   console.log('imageUrl:', imageUrl)
 
   try {
-    await buildMediaObject(res, {word, imageUrl})
+    buildMediaObject(res, {word, imageUrl})
   } catch(err) {
-    console.log(err.error)
-    buildErrorObject(res)
+    console.log(err.message)
+    buildErrorObject(res, err.message)
   }
 })
 

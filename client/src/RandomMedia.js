@@ -3,12 +3,12 @@ import axios from "axios";
 import './RandomMedia.css';
 
 const RandomMedia = () => {
-  const [ allMedia, setMedia ] = useState([{word: 'dog', giphyUrl: `https://media3.giphy.com/media/bbshzgyFQDqPHXBo4c/200.gif`}])
+  const [ allMedia, setMedia ] = useState([{word: 'dog', imageUrl: `https://media3.giphy.com/media/bbshzgyFQDqPHXBo4c/200.gif`}])
 
   const mediaList = allMedia.map((media, index) => {
     return (
       <div key={index}>
-        <img src={media.giphyUrl} alt={media.dog}/>
+        <img src={media.imageUrl} alt={media.dog}/>
         <p>{media.word}</p>
       </div>
     )
@@ -25,8 +25,8 @@ const RandomMedia = () => {
     //add the media to state []
     //append the newest media to the DOM
     const newMedia = await axios.get('/get-new-word');
-    console.log('media', newMedia)
-    return updateMedia(newMedia)
+    console.log('media', newMedia.data)
+    return updateMedia(newMedia.data)
   }
   
 
