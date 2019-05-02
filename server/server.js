@@ -44,7 +44,7 @@ const fetchGraphicUrl = async (word) => {
     const giphyEndpoint = giphyAPI + word
     const giphyResponse = await fetch(giphyEndpoint)
     const giphy = await giphyResponse.json()
-    console.log('giphyUrl:', giphy.data[0].images.fixed_height.url)
+    // console.log('giphyUrl:', giphy.data[0].images.fixed_height.url)
 
     return giphy.data[0].images.fixed_height.url
 }
@@ -74,8 +74,12 @@ app.get('/get-new-word', async (req, res) => {
   const imageUrl = await fetchGraphicUrl(word)
   console.log('imageUrl:', imageUrl)
 
-  
-
+  try {
+    await buildMediaObject(res, {word, imageUrl})
+  } catch(err) {
+    console.log(err.error)
+    buildErrorObject(res)
+  }
 })
 
 app.listen(5000, function () {
