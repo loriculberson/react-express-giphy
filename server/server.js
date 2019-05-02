@@ -14,25 +14,39 @@ const wordNikAPI = `https://api.wordnik.com/v4/words.json/randomWord?${wordNikDe
 
 
 // fetchWord resolves to an object that contains the word and the giphy 
-const fetchWord = () => {
-  return fetch(wordNikAPI)
-  .then((res) => res.json())
-  .then((json) => {
-    console.log(json.word)
-    return { 
-      word: json.word, 
-      giphyUrl: giphyAPI + json.word
-    }
-  })
+const fetchWord = async () => {
+  console.log('hi from server fetchWord')
+  // return fetch(wordNikAPI)
+  // .then((res) => res.json())
+  // .then((json) => {
+  //   console.log(json.word)
+  //   return { 
+  //     word: json.word
+  //     // giphyUrl: giphyAPI + json.word
+  //   }
+  // })
+  const dataResponse = await fetch(wordNikAPI)
+  const data = await dataResponse.json()
+  // console.log('word:', data.word)
+  return data.word
 }
 
-const fetchGraphic = ({word, giphyUrl}) => {
-  return fetch(giphyUrl)
-    .then((res) => res.json())
-    .then((json) => ({ 
-      word: word, 
-      imageUrl: json.data[0].images.fixed_height.url
-    }))
+const fetchGraphicUrl = async (word) => {
+  //takes in word
+  //builds url from giphy
+  //returns url
+  // return fetch(giphyUrl)
+    // .then((res) => res.json())
+    // .then((json) => ({ 
+    //   word: word, 
+    //   imageUrl: json.data[0].images.fixed_height.url
+    // }))
+    const giphyEndpoint = giphyAPI + word
+    const giphyResponse = await fetch(giphyEndpoint)
+    const giphy = await giphyResponse.json()
+    console.log('giphyUrl:', giphy.data[0].images.fixed_height.url)
+
+    return giphy.data[0].images.fixed_height.url
 }
 
 const buildMediaObject = (res, {word, imageUrl}) => {
@@ -50,11 +64,18 @@ const buildErrorObject = (res) => {
 
 // app.get('/', (req, res) => res.send('Hello everyone!'))
 
-app.get('/get-new-word', (req, res) => {
-  fetchWord()
-    .then(fetchGraphic)
-    .then((...args) => buildMediaObject(res, ...args))
-    .catch((...args) => buildErrorObject(res, ...args))
+app.get('/get-new-word', async (req, res) => {
+  // fetchWord()
+  //   .then(fetchGraphicUrl)
+  //   .then((...args) => buildMediaObject(res, ...args))
+  //   .catch((...args) => buildErrorObject(res, ...args))
+  const word = await fetchWord()
+  console.log('app.get word:', word)
+  const imageUrl = await fetchGraphicUrl(word)
+  console.log('imageUrl:', imageUrl)
+
+  
+
 })
 
 app.listen(5000, function () {

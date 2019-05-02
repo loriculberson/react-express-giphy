@@ -17,7 +17,7 @@ const RandomMedia = () => {
   const updateMedia = (media) => setMedia([...allMedia, media])
 
   const generateMedia = async () => {
-    console.log('hi from generateMedia!')
+    // console.log('hi from generateMedia!')
     // fetch word from the wordnik api 
     //pass word to giphy api
     //send the object of word and image url to client
