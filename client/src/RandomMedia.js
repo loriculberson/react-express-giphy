@@ -31,7 +31,7 @@ const RandomMedia = () => {
         <button onClick={generateMedia}>Surprise!</button>
         <button onClick={clearMedia}>Clear</button>
       </section>
-      <section className={styles.cardList}>
+      <section>
         {mediaList}
       </section>
     </div>
