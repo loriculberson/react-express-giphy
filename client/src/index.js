@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import RandomMedia from './RandomMedia';
+import RandomMedia from './components/main/RandomMedia';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<RandomMedia />, document.getElementById('root'));
