@@ -8,15 +8,24 @@ const app = express();
 
 const giphyAPI = `http://api.giphy.com/v1/gifs/search?api_key=${giphyAPIKey}&limit=1&offset=0&rating=G&lang=en&q=`;
 
-const wordNikDetails = `?hasDictionaryDef=true&includePartOfSpeech=noun%2C%20adjective%2C%20verb&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&`
+const wordNikDetails = `hasDictionaryDef=true&minCorpusCount=1500`
+// const wordNikDetails = `
+// hasDictionaryDef=true&
+// includePartOfSpeech=noun%2C%20verb%2C%20adjective&
+// minCorpusCount=1500&
+// maxCorpusCount=-1&minDictionaryCount=1&
+// maxDictionaryCount=-1&
+// minLength=5&maxLength=10`
+                        
+const wordNikAPI = `https://api.wordnik.com/v4/words.json/randomWord?${wordNikDetails}&api_key=${wordnikAPIKey}`
 
-const wordNikAPI = `https://api.wordnik.com/v4/words.json/randomWord?${wordNikDetails}api_key=${wordnikAPIKey}`
-
+// const wordNikAPI = 'http://api.wordnik.com/v4/words.json/randomWord?api_key=7ec492e47c574ac7dd00303d194061ec0fd92b7dfe23c558e'
 
 // fetchWord resolves to an object that contains the word and the giphy 
 const fetchWord = async () => {
   console.log('hi from server fetchWord')
   const dataResponse = await fetch(wordNikAPI)
+  console.log('dataResp', dataResponse)
   const data = await dataResponse.json()
   
   return data.word

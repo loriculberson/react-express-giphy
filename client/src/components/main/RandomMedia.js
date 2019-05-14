@@ -8,7 +8,7 @@ const RandomMedia = () => {
   const mediaList = allMedia.map((media, index) => {
     return (
       <div className={styles.card}key={index}>
-        <img src={media.imageUrl} alt={media.dog}/>
+        <img src={media.imageUrl} alt={media.word}/>
         <p>{media.word}</p>
       </div>
     )
@@ -28,10 +28,10 @@ const RandomMedia = () => {
     <div className={styles.app}>
       <section className={styles.header}>
         <h1>Random Word & Giphy</h1>
-        <button onClick={generateMedia}>Surprise!</button>
+        <button data-surprise onClick={generateMedia}>Surprise!</button>
         <button onClick={clearMedia}>Clear</button>
       </section>
-      <section>
+      <section data-media-results>
         {mediaList}
       </section>
     </div>
