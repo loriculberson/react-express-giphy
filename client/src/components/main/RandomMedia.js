@@ -18,7 +18,7 @@ const RandomMedia = () => {
 
   const generateMedia = async () => {
     const newMedia = await axios.get('/get-new-word');
-    console.log('media', newMedia.data)
+    console.log('media:', newMedia.data)
     return updateMedia(newMedia.data)
   }
   
