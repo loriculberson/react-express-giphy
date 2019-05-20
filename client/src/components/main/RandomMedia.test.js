@@ -50,8 +50,32 @@ describe('RandomMedia', () => {
       })
     })
 
-    xdescribe('when data is not returned', () => {
-      
+    describe('when data is not returned', () => {
+      it('displays an error message', async done => {
+
+        axios.get(() => { 
+          console.log('axios mock getting config')
+            return (
+              Promise.reject({
+                data: {
+                  message: "No image was found", 
+                }
+              }))
+        })
+  
+        const wrapper = shallow(<RandomMedia />)
+        const surpriseButton = wrapper.find('[data-surprise]')
+
+        surpriseButton.simulate('click');
+        await flushResolvedPromises()
+        setTimeout(() => {
+          const errorResults = wrapper.find('#toast-container')
+          console.log('errorResults:', errorResults);
+          console.log(wrapper.debug())
+          expect(errorResults.text()).toContain("No image was found")
+          done()
+        }, 300);
+      })
     })
   })
 })

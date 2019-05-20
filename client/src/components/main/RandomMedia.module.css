@@ -16,4 +16,7 @@
   background: rgb(223, 223, 207);
 }
 
+.error {
+  visibility: hidden;
+}
 

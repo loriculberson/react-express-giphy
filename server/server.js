@@ -35,7 +35,10 @@ const fetchGraphicUrl = async (word) => {
     const giphyEndpoint = giphyAPI + word
     const giphyResponse = await fetch(giphyEndpoint)
     const giphy = await giphyResponse.json()
-
+    console.log('giphy:', giphy)
+    if (giphy.data.length === 0) {
+      throw new Error(`No image was found for word ${word}`)
+    }
     return giphy.data[0].images.fixed_height.url
 }
 
@@ -47,35 +50,47 @@ const buildMediaObject = (res, {word, imageUrl}) => {
   res.send(media);
 }
 
-const buildErrorObject = (res, errorMessage) => {
+const handleError = (res, errorMessage) => {
   // const media = { 
   //   word: 'Data not available!!!', 
   //   imageUrl: `https://media0.giphy.com/media/7lD9Gz5FxpRCg/200.gif`
   // }
   // res.send(media);
-  res.status(500).send(errorMessage)
+  res.status(500).json(errorMessage)
 }
 
 // app.get('/', (req, res) => res.send('Hello everyone!'))
 
-app.get('/get-new-word', async (req, res) => {
+app.get('/get-new-word', async (req, res, next) => {
   // fetchWord()
   //   .then(fetchGraphicUrl)
   //   .then((...args) => buildMediaObject(res, ...args))
-  //   .catch((...args) => buildErrorObject(res, ...args))
-  const word = await fetchWord()
-  console.log('app.get word:', word)
-  const imageUrl = await fetchGraphicUrl(word)
-  console.log('imageUrl:', imageUrl)
-
+  //   .catch((...args) => handleError(res, ...args))
+  
   try {
+    // const word = await fetchWord()
+    const word = 'a08asfdasfj8s7675^%^%&45464$%'
+    console.log('app.get word:', word)
+    const imageUrl = await fetchGraphicUrl(word)
+    console.log('imageUrl:', imageUrl)
     buildMediaObject(res, {word, imageUrl})
   } catch(err) {
-    console.log(err.message)
-    buildErrorObject(res, err.message)
+    console.log('ERROR:', err)
+    // handleError(res, err.message)
+    next(err);
   }
 })
+
+function errorHandler (err, req, res, next) {
+  console.log('default errorHandler:', err);
+  if (res.headersSent) {
+    return next(err)
+  }
+  res.json(500, { error: err.message })
+}
 
 app.listen(5000, function () {
   console.log('Welcome to the app, listening on 5000!')
 })
+
+app.use(errorHandler);
